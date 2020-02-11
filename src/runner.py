@@ -67,16 +67,14 @@ def train(args, model, device, train_loader, optimizer, epoch):
         output = model(data)
         loss = F.nll_loss(output, target)
 
-        model.zero_grad()
         optimizer.zero_grad()
 
         grads = grad(loss, model.parameters(), only_inputs=True,
                      create_graph=True)[0]
-        print(grads)
+        # print(grads)
         gn2 = sum([grd.norm()**2 for grd in grads])
-
+        loss.backward()
         optimizer.step()
-        gn2.backward()
 
         # if batch_idx % args.log_interval == 0:
         #     print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
